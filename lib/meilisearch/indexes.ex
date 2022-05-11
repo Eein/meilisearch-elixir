@@ -137,7 +137,7 @@ defmodule Meilisearch.Indexes do
   """
   @spec update_filterable_attributes(String.t(), filterable_attributes: [String.t()]) :: HTTP.response()
   def update_filterable_attributes(uid, opts \\ []) do
-    with {:ok, primary_key} <- Keyword.fetch(opts, :filterable_attributes),
+    with {:ok, filterable_attributes} <- Keyword.fetch(opts, :filterable_attributes),
          body <- filterable_attributes do
       HTTP.put_request("indexes/#{uid}/settings/filterable-attributes", body)
     else
