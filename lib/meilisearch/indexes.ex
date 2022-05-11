@@ -139,7 +139,7 @@ defmodule Meilisearch.Indexes do
   def update_filterable_attributes(uid, opts \\ []) do
     with {:ok, filterable_attributes} <- Keyword.fetch(opts, :filterable_attributes),
          body <- filterable_attributes do
-      HTTP.put_request("indexes/#{uid}/settings/filterable-attributes", body)
+      HTTP.post_request("indexes/#{uid}/settings/filterable-attributes", body)
     else
       _ -> {:error, "filterable_attributes is required"}
     end
