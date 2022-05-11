@@ -123,8 +123,18 @@ defmodule Meilisearch.Indexes do
 
   ## Examples
 
+      iex> Meilisearch.Indexes.update_filterable_attributes("meilisearch_test", filterable_attributes: ["attribute"])
+      {:ok,
+      %{
+        "enqueuedAt" => "2022-05-11T18:00:49.105303Z",
+        "indexUid" => "messages",
+        "status" => "enqueued",
+        "type" => "settingsUpdate",
+        "uid" => 28
+      }}
+
       iex> Meilisearch.Indexes.filterable_attributes("meilisearch_test")
-      {:ok, nil}
+      {:ok, ["attribute"]}
   """
   @spec filterable_attributes(String.t()) :: HTTP.response()
   def filterable_attributes(uid) do
@@ -163,7 +173,14 @@ defmodule Meilisearch.Indexes do
   ## Examples
 
       iex> Meilisearch.Indexes.reset_filterable_attributes("meilisearch_test")
-      {:ok, nil}
+      {:ok,
+      %{
+        "enqueuedAt" => "2022-05-11T18:08:13.924805Z",
+        "indexUid" => "messages",
+        "status" => "enqueued",
+        "type" => "settingsUpdate",
+        "uid" => 29
+      }}
 
       iex> Meilisearch.delete("nonexistent_index")
       {:error, 404, Index meilisearch_test not found"}
@@ -181,8 +198,8 @@ defmodule Meilisearch.Indexes do
       iex> Meilisearch.Indexes.delete("meilisearch_test")
       {:ok, nil}
 
-      iex> Meilisearch.delete("nonexistent_index")
-      {:error, 404, Index meilisearch_test not found"}
+      iex> Meilisearch.Indexes.filterable_attributes("meilisearch_test")
+      {:ok, []}
   """
   @spec delete(String.t()) :: HTTP.response()
   def delete(uid) do
