@@ -56,6 +56,6 @@ defmodule Meilisearch.Search do
         q -> [{:q, q} | opts]
       end
 
-    HTTP.get_request("indexes/#{uid}/search", [], params: params)
+    HTTP.post_request("indexes/#{uid}/search", params)
   end
 end
