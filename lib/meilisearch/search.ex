@@ -53,7 +53,7 @@ defmodule Meilisearch.Search do
     params =
       case search_query do
         nil -> opts
-        q -> [{:q, q} | opts]
+        q -> [{"q", q} | opts]
       end
 
     HTTP.post_request("indexes/#{uid}/search", params)
