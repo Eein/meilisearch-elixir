@@ -119,6 +119,33 @@ defmodule Meilisearch.Indexes do
   end
 
   @doc """
+  Update index's filterable attributes.
+  `filterable_attributes` option is required.
+
+  ## Examples
+
+      iex> Meilisearch.Indexes.update("meilisearch_test", primary_key: "new_key")
+      {:ok,
+        %{
+          "primaryKey" => "new_primary_key",
+          "createdAt" => "2020-05-25T04:30:10.681720067Z",
+          "name" => "meilisearch_test",
+          "uid" => "meilisearch_test",
+          "updatedAt" => "2020-05-25T04:30:10.685540577Z"
+        }
+      }
+  """
+  @spec update_filterable_attributes(String.t(), filterable_attributes: [String.t()]) :: HTTP.response()
+  def update(uid, opts \\ []) do
+    with {:ok, primary_key} <- Keyword.fetch(opts, :filterable_attributes),
+         body <- filterable_attributes do
+      HTTP.put_request("indexes/#{uid}/settings/filterable-attributes", body)
+    else
+      _ -> {:error, "filterable_attributes is required"}
+    end
+  end
+
+  @doc """
   Delete an index
 
   ## Examples
