@@ -119,21 +119,33 @@ defmodule Meilisearch.Indexes do
   end
 
   @doc """
-  Update index's filterable attributes.
+  Get index filterable attributes.
+
+  ## Examples
+
+      iex> Meilisearch.Indexes.filterable_attributes("meilisearch_test")
+      {:ok, nil}
+  """
+  @spec filterable_attributes(String.t()) :: HTTP.response()
+  def filterable_attributes(uid) do
+    HTTP.get_request("indexes/#{uid}/settings/filterable-attributes")
+  end
+
+  @doc """
+  Update index filterable attributes.
   `filterable_attributes` option is required.
 
   ## Examples
 
-      iex> Meilisearch.Indexes.update("meilisearch_test", primary_key: "new_key")
+      iex> Meilisearch.Indexes.update_filterable_attributes("meilisearch_test", filterable_attributes: ["attribute"])
       {:ok,
-        %{
-          "primaryKey" => "new_primary_key",
-          "createdAt" => "2020-05-25T04:30:10.681720067Z",
-          "name" => "meilisearch_test",
-          "uid" => "meilisearch_test",
-          "updatedAt" => "2020-05-25T04:30:10.685540577Z"
-        }
-      }
+      %{
+        "enqueuedAt" => "2022-05-11T18:00:49.105303Z",
+        "indexUid" => "messages",
+        "status" => "enqueued",
+        "type" => "settingsUpdate",
+        "uid" => 28
+      }}
   """
   @spec update_filterable_attributes(String.t(), filterable_attributes: [String.t()]) :: HTTP.response()
   def update_filterable_attributes(uid, opts \\ []) do
@@ -143,6 +155,22 @@ defmodule Meilisearch.Indexes do
     else
       _ -> {:error, "filterable_attributes is required"}
     end
+  end
+
+  @doc """
+  Resets index filterable attributes.
+
+  ## Examples
+
+      iex> Meilisearch.Indexes.reset_filterable_attributes("meilisearch_test")
+      {:ok, nil}
+
+      iex> Meilisearch.delete("nonexistent_index")
+      {:error, 404, Index meilisearch_test not found"}
+  """
+  @spec reset_filterable_attributes(String.t()) :: HTTP.response()
+  def reset_filterable_attributes(uid) do
+    HTTP.delete_request("indexes/#{uid}/settings/filterable-attributes")
   end
 
   @doc """
