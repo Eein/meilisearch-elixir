@@ -360,4 +360,76 @@ defmodule Meilisearch.Settings do
   def reset_displayed_attributes(index_uid) do
     HTTP.delete_request("indexes/#{index_uid}/settings/displayed-attributes")
   end
+
+  @doc """
+  Get index filterable attributes.
+
+  ## Examples
+
+      iex> Meilisearch.Settings.update_filterable_attributes("meilisearch_test", filterable_attributes: ["attribute"])
+      {:ok,
+      %{
+        "enqueuedAt" => "2022-05-11T18:00:49.105303Z",
+        "indexUid" => "messages",
+        "status" => "enqueued",
+        "type" => "settingsUpdate",
+        "uid" => 28
+      }}
+
+      iex> Meilisearch.Settings.get_filterable_attributes("meilisearch_test")
+      {:ok, ["attribute"]}
+  """
+  @spec get_filterable_attributes(String.t()) :: HTTP.response()
+  def get_filterable_attributes(uid) do
+    HTTP.get_request("indexes/#{uid}/settings/filterable-attributes")
+  end
+
+  @doc """
+  Update index filterable attributes.
+  `filterable_attributes` option is required.
+
+  ## Examples
+
+      iex> Meilisearch.Settings.update_filterable_attributes("meilisearch_test", filterable_attributes: ["attribute"])
+      {:ok,
+      %{
+        "enqueuedAt" => "2022-05-11T18:00:49.105303Z",
+        "indexUid" => "messages",
+        "status" => "enqueued",
+        "type" => "settingsUpdate",
+        "uid" => 28
+      }}
+  """
+  @spec update_filterable_attributes(String.t(), filterable_attributes: [String.t()]) :: HTTP.response()
+  def update_filterable_attributes(uid, opts \\ []) do
+    with {:ok, filterable_attributes} <- Keyword.fetch(opts, :filterable_attributes),
+         body <- filterable_attributes do
+      HTTP.post_request("indexes/#{uid}/settings/filterable-attributes", body)
+    else
+      _ -> {:error, "filterable_attributes is required"}
+    end
+  end
+
+  @doc """
+  Resets index filterable attributes.
+
+  ## Examples
+
+      iex> Meilisearch.Settings.reset_filterable_attributes("meilisearch_test")
+      {:ok,
+      %{
+        "enqueuedAt" => "2022-05-11T18:08:13.924805Z",
+        "indexUid" => "messages",
+        "status" => "enqueued",
+        "type" => "settingsUpdate",
+        "uid" => 29
+      }}
+
+      iex> Meilisearch.Indexes.get_filterable_attributes("meilisearch_test")
+      {:ok, []}
+  """
+  @spec reset_filterable_attributes(String.t()) :: HTTP.response()
+  def reset_filterable_attributes(uid) do
+    HTTP.delete_request("indexes/#{uid}/settings/filterable-attributes")
+  end
 end

@@ -119,78 +119,6 @@ defmodule Meilisearch.Indexes do
   end
 
   @doc """
-  Get index filterable attributes.
-
-  ## Examples
-
-      iex> Meilisearch.Indexes.update_filterable_attributes("meilisearch_test", filterable_attributes: ["attribute"])
-      {:ok,
-      %{
-        "enqueuedAt" => "2022-05-11T18:00:49.105303Z",
-        "indexUid" => "messages",
-        "status" => "enqueued",
-        "type" => "settingsUpdate",
-        "uid" => 28
-      }}
-
-      iex> Meilisearch.Indexes.filterable_attributes("meilisearch_test")
-      {:ok, ["attribute"]}
-  """
-  @spec filterable_attributes(String.t()) :: HTTP.response()
-  def filterable_attributes(uid) do
-    HTTP.get_request("indexes/#{uid}/settings/filterable-attributes")
-  end
-
-  @doc """
-  Update index filterable attributes.
-  `filterable_attributes` option is required.
-
-  ## Examples
-
-      iex> Meilisearch.Indexes.update_filterable_attributes("meilisearch_test", filterable_attributes: ["attribute"])
-      {:ok,
-      %{
-        "enqueuedAt" => "2022-05-11T18:00:49.105303Z",
-        "indexUid" => "messages",
-        "status" => "enqueued",
-        "type" => "settingsUpdate",
-        "uid" => 28
-      }}
-  """
-  @spec update_filterable_attributes(String.t(), filterable_attributes: [String.t()]) :: HTTP.response()
-  def update_filterable_attributes(uid, opts \\ []) do
-    with {:ok, filterable_attributes} <- Keyword.fetch(opts, :filterable_attributes),
-         body <- filterable_attributes do
-      HTTP.post_request("indexes/#{uid}/settings/filterable-attributes", body)
-    else
-      _ -> {:error, "filterable_attributes is required"}
-    end
-  end
-
-  @doc """
-  Resets index filterable attributes.
-
-  ## Examples
-
-      iex> Meilisearch.Indexes.reset_filterable_attributes("meilisearch_test")
-      {:ok,
-      %{
-        "enqueuedAt" => "2022-05-11T18:08:13.924805Z",
-        "indexUid" => "messages",
-        "status" => "enqueued",
-        "type" => "settingsUpdate",
-        "uid" => 29
-      }}
-
-      iex> Meilisearch.delete("nonexistent_index")
-      {:error, 404, Index meilisearch_test not found"}
-  """
-  @spec reset_filterable_attributes(String.t()) :: HTTP.response()
-  def reset_filterable_attributes(uid) do
-    HTTP.delete_request("indexes/#{uid}/settings/filterable-attributes")
-  end
-
-  @doc """
   Delete an index
 
   ## Examples
@@ -199,7 +127,7 @@ defmodule Meilisearch.Indexes do
       {:ok, nil}
 
       iex> Meilisearch.Indexes.filterable_attributes("meilisearch_test")
-      {:ok, []}
+      {:error, 404, Index meilisearch_test not found"}
   """
   @spec delete(String.t()) :: HTTP.response()
   def delete(uid) do
