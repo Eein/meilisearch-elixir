@@ -366,7 +366,7 @@ defmodule Meilisearch.Settings do
 
   ## Examples
 
-      iex> Meilisearch.Settings.update_filterable_attributes("meilisearch_test", filterable_attributes: ["attribute"])
+      iex> Meilisearch.Settings.update_filterable_attributes("meilisearch_test", ["attribute"])
       {:ok,
       %{
         "enqueuedAt" => "2022-05-11T18:00:49.105303Z",
@@ -386,11 +386,10 @@ defmodule Meilisearch.Settings do
 
   @doc """
   Update index filterable attributes.
-  `filterable_attributes` option is required.
 
   ## Examples
 
-      iex> Meilisearch.Settings.update_filterable_attributes("meilisearch_test", filterable_attributes: ["attribute"])
+      iex> Meilisearch.Settings.update_filterable_attributes("meilisearch_test", ["attribute"])
       {:ok,
       %{
         "enqueuedAt" => "2022-05-11T18:00:49.105303Z",
@@ -400,14 +399,9 @@ defmodule Meilisearch.Settings do
         "uid" => 28
       }}
   """
-  @spec update_filterable_attributes(String.t(), filterable_attributes: [String.t()]) :: HTTP.response()
-  def update_filterable_attributes(uid, opts \\ []) do
-    with {:ok, filterable_attributes} <- Keyword.fetch(opts, :filterable_attributes),
-         body <- filterable_attributes do
-      HTTP.post_request("indexes/#{uid}/settings/filterable-attributes", body)
-    else
-      _ -> {:error, "filterable_attributes is required"}
-    end
+  @spec update_filterable_attributes(String.t(), list(String.t())) :: HTTP.response()
+  def update_filterable_attributes(uid, filterable_attributes) do
+    HTTP.post_request("indexes/#{uid}/settings/filterable-attributes", filterable_attributes)
   end
 
   @doc """
