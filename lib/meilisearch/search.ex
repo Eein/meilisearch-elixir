@@ -52,8 +52,8 @@ defmodule Meilisearch.Search do
   def search(uid, search_query, opts \\ []) do
     params =
       case search_query do
-        nil -> opts
-        q -> Map.merge(opts, %{q: q})
+        nil -> Enum.into(opts, %{})
+        q -> Map.merge(Enum.into(opts, %{}), %{q: q})
       end
     IO.inspect(params)
     HTTP.post_request("indexes/#{uid}/search", params)
